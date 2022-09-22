@@ -1,0 +1,29 @@
+// MightyMacro Code Template
+// ESP32-Enabled Macro Keyboard
+// Noah Mills || 9/4/2022                 <------ UPDATE THIS
+
+// Buttons
+#include <Bounce2.h>                      // Bounce2 Library
+int numButtons = 9;
+const uint8_t buttonPins[9] = {13, 32, 26, 2, 21, 33, 25, 15, 19};  // Fill in { } with list of GPIO pins
+Bounce * buttons = new Bounce[9];         // Creates an array of Bounce objects
+
+// Bluetooth
+// Additional documentation available here:  https://github.com/T-vK/ESP32-BLE-Keyboard
+#include <BleKeyboard.h>                                      // BleKeyboard Library          
+BleKeyboard bleKeyboard("Big Steezy's Macro Stu", "Noah Mills", 100);  // Replace Device Name / Manufacturer w/ your info
+
+void setup() {
+  Serial.begin(115200);
+  initButtons();                      // Initialize Buttons on Startup
+  initBattery();                      // Initialize Battery on Startup
+  bleKeyboard.begin();                // Begin Bluetooth Connection
+
+}
+
+void loop() {
+  if (bleKeyboard.isConnected()) {    // If Bluetooth is Connected
+    readButtons();                    // Read State of Buttons and Perform Functions
+    updateBattery();                  // Update Battery Status if Needed
+  }
+}
